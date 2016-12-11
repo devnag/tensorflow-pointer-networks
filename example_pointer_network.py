@@ -6,7 +6,7 @@ import random
 import sys
 import tensorflow as tf
 
-# See https://medium.com/@devnag for the related blog post
+# See https://medium.com/@devnag/pointer-networks-in-tensorflow-with-sample-code-14645063f264
 
 # Uncomment this to stop corner printing and see full/verbatim
 #np.set_printoptions(threshold=np.nan)
@@ -58,7 +58,7 @@ def evaluate(max_length,         # J
              num_training_loops,
              loss_interval,
              optimizer):
-    """Core evaluation function given hyperparameters -- returns tuple of training losses and """
+    """Core evaluation function given hyperparameters -- returns tuple of training losses and test percentage"""
 
     # S: Size of each vector (1 here, ignored/implicit)
     # I: num_indices (2 here; start and end)

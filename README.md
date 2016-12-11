@@ -5,7 +5,8 @@ Pointer Networks in Tensorflow
 ### Introduction
 This repo has sample code for pointer networks (Vinyals 2015) over a toy problem indexing a high-value segment embedded between two low-value segments.
 
-See https://medium.com/@devnag/ for the relevant blog post.
+See [the related blog post here.](https://medium.com/@devnag/pointer-networks-in-tensorflow-with-sample-code-14645063f264)
+
 
 
 ### Running
