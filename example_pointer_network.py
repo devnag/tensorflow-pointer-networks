@@ -198,7 +198,7 @@ def evaluate(max_length,         # J
         loss = tf.sqrt(tf.reduce_mean(tf.pow(idx_distributions - actual_index_dists, 2.0)))
         train = optimizer.minimize(loss)
 
-        init_op = tf.initialize_all_variables()
+        init_op = tf.global_variables_initializer()
         sess = tf.Session()
         sess.run(init_op)
 
