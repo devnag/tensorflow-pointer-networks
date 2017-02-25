@@ -95,12 +95,12 @@ def evaluate(max_length,         # J
                                             shape=(num_indices, batch_size, input_length))
 
         # Define the type of recurrent cell to be used. Only used for sizing.
-        cell_enc = tf.nn.rnn_cell.LSTMCell(lstm_width,
+        cell_enc = tf.contrib.rnn.LSTMCell(lstm_width,
                                            input_size=None,
                                            use_peepholes=False,
                                            initializer=init)
 
-        cell_dec = tf.nn.rnn_cell.LSTMCell(lstm_width,
+        cell_dec = tf.contrib.rnn.LSTMCell(lstm_width,
                                            input_size=None,
                                            use_peepholes=False,
                                            initializer=init)
@@ -176,7 +176,7 @@ def evaluate(max_length,         # J
                     enc_portions.append(enc_portion)
                     index_predists.append(index_predist)
 
-                idx_predistribution = tf.transpose(tf.pack(index_predists))                              # B x J
+                idx_predistribution = tf.transpose(tf.stack(index_predists))                             # B x J
                 # Now, do softmax over predist, on final dim J (input length), to get to real dist
                 idx_distribution = tf.nn.softmax(idx_predistribution, dim=-1)                            # B x J
                 ptr_output_dists.append(idx_distribution)
@@ -191,7 +191,7 @@ def evaluate(max_length,         # J
                 input_ = ptr_output    # The output goes straight back in as next input
 
         # Compare the one-hot distribution (actuals) vs. the softmax distribution: I x (B x J)
-        idx_distributions = tf.pack(ptr_output_dists)                                                   # I x B x J
+        idx_distributions = tf.stack(ptr_output_dists)                                                   # I x B x J
 
         # ############## LOSS
         # RMS of difference across all batches, all indices
