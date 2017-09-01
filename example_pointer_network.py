@@ -16,9 +16,9 @@ def generate_nested_sequence(length, min_seglen=5, max_seglen=10):
     """Generate low-high-low sequence, with indexes of the first/last high/middle elements"""
 
     # Low (1-5) vs. High (6-10)
-    seq_before = [(random.randint(1,5)) for x in xrange(random.randint(min_seglen, max_seglen))]
-    seq_during = [(random.randint(6,10)) for x in xrange(random.randint(min_seglen, max_seglen))]
-    seq_after = [random.randint(1,5) for x in xrange(random.randint(min_seglen, max_seglen))]
+    seq_before = [(random.randint(1,5)) for x in range(random.randint(min_seglen, max_seglen))]
+    seq_during = [(random.randint(6,10)) for x in range(random.randint(min_seglen, max_seglen))]
+    seq_after = [random.randint(1,5) for x in range(random.randint(min_seglen, max_seglen))]
     seq = seq_before + seq_during + seq_after
 
     # Pad it up to max len with 0's
@@ -109,7 +109,7 @@ def evaluate(max_length,         # J
         enc_state = cell_enc.zero_state(batch_size, tf.float32)                # B x L: 0 is starting state for RNN
         enc_states = []
         with tf.variable_scope("rnn_encoder"):
-            for j in xrange(max_length):
+            for j in range(max_length):
                 if j > 0:
                     tf.get_variable_scope().reuse_variables()
                 input_ = inputs[:, j:j+1]                                 # B x S : step through input, 1 batch at time
@@ -138,7 +138,7 @@ def evaluate(max_length,         # J
             input_ = starting_generation_symbol    # Always B x S
 
             # Push out each index
-            for i in xrange(num_indices):
+            for i in range(num_indices):
                 if i > 0:
                     tf.get_variable_scope().reuse_variables()
 
@@ -164,7 +164,7 @@ def evaluate(max_length,         # J
                 # Vector to blend
                 v_blend = tf.get_variable("v_blend", [num_blend_units, 1], initializer=init)   # D x 1
 
-                for input_length_index in xrange(input_length):
+                for input_length_index in range(input_length):
                     # Use the cell values (.c), not the output (.h) values of each state
                     # Each is B x 1, and there are J of them. Flatten to J x B
                     enc_portion = tf.matmul(get_lstm_state(enc_states[input_length_index]), W_1)         # B x D
@@ -199,7 +199,7 @@ def evaluate(max_length,         # J
         train = optimizer.minimize(loss)
 
         init_op = tf.global_variables_initializer()
-        sess = tf.Session()
+        sess = tf.Session()  # config=config)
         sess.run(init_op)
 
         # ############## TRAINING
@@ -211,7 +211,7 @@ def evaluate(max_length,         # J
         # Note that our training/testing datasets are the same size as our batch. This is
         #   unusual and just makes the code slightly simpler. In general your dataset size
         #   is >> your batch size and you rotate batches from the dataset through.
-        for batch_index in xrange(batch_size):
+        for batch_index in range(batch_size):
             data = generate_nested_sequence(max_length,
                                             training_segment_lengths[0],
                                             training_segment_lengths[1])
@@ -224,7 +224,7 @@ def evaluate(max_length,         # J
                                           np.stack(second_indexes)])
 
         losses = []
-        for step in xrange(num_training_loops):
+        for step in range(num_training_loops):
             tf_outputs = [loss, train, idx_distributions, actual_index_dists]
             results = sess.run(tf_outputs, feed_dict=train_dict)
             step_loss = results[0]
@@ -242,7 +242,7 @@ def evaluate(max_length,         # J
         sequences = []
         first_indexes = []
         second_indexes = []
-        for batch_index in xrange(batch_size):
+        for batch_index in range(batch_size):
             data = generate_nested_sequence(max_length,
                                             testing_segment_lengths[0],
                                             testing_segment_lengths[1])
@@ -258,7 +258,7 @@ def evaluate(max_length,         # J
         print("Test %s: loss %s" % (i, results[0]))
 
         incorrect_pointers = 0
-        for batch_index in xrange(batch_size):
+        for batch_index in range(batch_size):
 
             first_diff = first_indexes[batch_index] - results[1][0][batch_index]
             first_diff_max = np.max(np.abs(first_diff))
@@ -285,7 +285,7 @@ def evaluate(max_length,         # J
 
 
 max_reset_retries = 20
-for reset_loop_index in xrange(max_reset_retries):
+for reset_loop_index in range(max_reset_retries):
 
     # Create optimizer - AdaGrad works well on this problem
     learning_rate = 1.0
