@@ -96,12 +96,10 @@ def evaluate(max_length,         # J
 
         # Define the type of recurrent cell to be used. Only used for sizing.
         cell_enc = tf.contrib.rnn.LSTMCell(lstm_width,
-                                           input_size=None,
                                            use_peepholes=False,
                                            initializer=init)
 
         cell_dec = tf.contrib.rnn.LSTMCell(lstm_width,
-                                           input_size=None,
                                            use_peepholes=False,
                                            initializer=init)
 
